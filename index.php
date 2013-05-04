@@ -79,7 +79,7 @@ router('test',function(){
 });
 
 router('test2',function(){
-	echo '<form method="POST" action="./domain.add"><input name="domain" value="test.com"/><input type="submit"/></form>';
+	echo '<form method="POST" action="./domain.add"><input name="domain" value="test.com"/><input name="constantPath" value="/"><input name="customName" value="test.com"/><input type="submit"/></form>';
 });
 
 router('test3', function(){

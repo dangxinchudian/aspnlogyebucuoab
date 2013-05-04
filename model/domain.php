@@ -1,11 +1,12 @@
 <?php
 class domain extends model{
 
-	public function add($domain, $user_id){
+	public function add($domain, $user_id,  $custom_name = ''){
 		$insertArray = array(
 			'domain_name' => $domain, 
 			'user_id' => $user_id,
-			'creat_time' => time()
+			'creat_time' => time(),
+			'custom_name' => $custom_name
 		);
 		$result = $this->db()->insert('domain', $insertArray);
 		if($result == 0) return false;
