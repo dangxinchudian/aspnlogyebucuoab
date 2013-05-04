@@ -1,2 +1,3 @@
-git pull https://github.com/dangxinchudian/aspnlogyebucuoab.git
+获取命令
 ================
+git pull https://github.com/dangxinchudian/aspnlogyebucuoab.git
