@@ -110,4 +110,21 @@ router('constant.fault',function(){		//故障历史
 
 });
 
+router('constant.setPath',function(){		//设置监控路径
+
+	$user = model('user');
+	$user_id = $user->sessionCheck(function(){
+		json(false, '未登录');
+	});
+
+	$constant_id = filter('constant_id', '/^[0-9]{1,9}$/', '监测ID错误');
+	$path = filter('path', '/^\/.{0,255}+$/', '监控路径格式错误');
+
+	$constantModel = model('constant');
+	$result = $constantModel->get($constant_id);
+	if(empty($result)) json(false, '监测ID对应对象为空');
+	$constantModel->update($constant_id, array('path' => $path));
+	json(true, '路径设置成功');
+});
+
 ?>

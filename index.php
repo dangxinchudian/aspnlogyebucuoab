@@ -135,6 +135,10 @@ router('test14',function(){
 	print_r($server->check(2));
 });
 
+router('test15',function(){
+	echo '<form method="POST" action="./constant.setPath"><input name="constant_id" value="1"/><input name="path" value="/"><input type="submit"/></form>';
+});
+
 /*router('about',function(){
 	$data = array('view' => 'about');
 	view('about.html', $data);
