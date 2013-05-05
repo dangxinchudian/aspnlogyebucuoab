@@ -94,6 +94,30 @@ class aws extends modelLog{
 		return $this->db()->query($sql, 'array');		
 	}
 
+	public function searchref($domain){
+		$schema = str_replace('.', '_', $domain).'_log';
+		$check = $this->checkSchema($schema);
+		if(!$check) return false;
+		$sql = "SELECT * FROM {$schema}.searchref";
+		return $this->db()->query($sql, 'array');		
+	}
+
+	public function session($domain){
+		$schema = str_replace('.', '_', $domain).'_log';
+		$check = $this->checkSchema($schema);
+		if(!$check) return false;
+		$sql = "SELECT * FROM {$schema}.session";
+		return $this->db()->query($sql, 'array');		
+	}
+
+	public function searchwords($domain, $start, $limit){
+		$schema = str_replace('.', '_', $domain).'_log';
+		$check = $this->checkSchema($schema);
+		if(!$check) return false;
+		$sql = "SELECT * FROM {$schema}.searchwords ORDER BY searchwords.hits DESC LIMIT {$start},{$limit}";
+		return $this->db()->query($sql, 'array');		
+	}
+
 	public function summary($array){
 		if(empty($array)) return false;
 		$return = array();

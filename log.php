@@ -251,6 +251,66 @@ router('log.pageref', function(){
 	json(true, $return);
 });
 
+router('log.searchref', function(){
 
+	$user = model('user');
+	$user_id = $user->sessionCheck(function(){
+		json(false, '未登录');
+	});
+
+	$domain_id = filter('domain_id', '/^[0-9]{1,9}$/', '域名ID格式错误');
+	$time = filter('time', '/^[0-9]{1,10}$/', '日期格式错误');
+
+	$domain = 'www.firefoxbug.net';
+
+	$aws = model('aws');
+	$result = $aws->searchref($domain);
+	if($result === false) json(false, '该域名不存在');
+
+	json(true, $result);
+});
+
+router('log.searchwords', function(){
+
+	$user = model('user');
+	$user_id = $user->sessionCheck(function(){
+		json(false, '未登录');
+	});
+
+	$domain_id = filter('domain_id', '/^[0-9]{1,9}$/', '域名ID格式错误');
+	$time = filter('time', '/^[0-9]{1,10}$/', '日期格式错误');
+	$page = filter('page', '/^[0-9]{1,10}$/', 'page格式错误');
+	$limit = filter('limit', '/^[0-9]{1,10}$/', '偏移位置格式错误');
+
+	$domain = 'www.firefoxbug.net';
+	if($page < 1) $page = 1;
+	$start = ($page - 1) * $limit;
+
+	$aws = model('aws');
+	$result = $aws->searchwords($domain, $start, $limit);
+	if($result === false) json(false, '该域名不存在');
+
+	json(true, $result);
+});
+
+
+router('log.session', function(){
+
+	$user = model('user');
+	$user_id = $user->sessionCheck(function(){
+		json(false, '未登录');
+	});
+
+	$domain_id = filter('domain_id', '/^[0-9]{1,9}$/', '域名ID格式错误');
+	$time = filter('time', '/^[0-9]{1,10}$/', '日期格式错误');
+
+	$domain = 'www.firefoxbug.net';
+
+	$aws = model('aws');
+	$result = $aws->session($domain);
+	if($result === false) json(false, '该域名不存在');
+
+	json(true, $result);
+});
 
 ?>
