@@ -29,15 +29,21 @@ router('constant.list',function(){		//中断监测列表
 	$start = 0;
 	$limit = 10;
 
-	$start = filter('start', '/^[0-9]{1,9}$/', '起始位置格式错误');
+	$page = filter('page', '/^[0-9]{1,9}$/', '起始位置格式错误');
 	$limit = filter('limit', '/^[0-9]{1,9}$/', '偏移格式错误');
+	$start_time = filter('fault_start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
+	$stop_time = filter('fault_stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
 	if($limit <= 0) $limit = 1;
+
+	$start = ($page - 1) * $limit;
 
 	$constantModel = model('constant');
 	$list = $constantModel->userGet($user_id, $start, $limit);
 	foreach ($list as $key => $value) {
 		$list[$key]['available'] = $constantModel->available($value['constant_id'], $value['creat_time']);
-		$list[$key]['3dayfault'] = $constantModel->faultTime($value['constant_id'], time() - 3600*24*3, time());
+		$list[$key]['fault_time'] = $constantModel->faultTime($value['constant_id'], $start_time, $stop_time);
+		$list[$key]['fault_start_time'] = $start_time;
+		$list[$key]['fault_stop_time'] = $stop_time;
 	}
 	$count = $constantModel->userCount($user_id);
 	$array = array(
