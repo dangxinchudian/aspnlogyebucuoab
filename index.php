@@ -139,6 +139,10 @@ router('test15',function(){
 	echo '<form method="POST" action="./constant.setPath"><input name="constant_id" value="1"/><input name="path" value="/"><input type="submit"/></form>';
 });
 
+router('test16',function(){
+	echo '<form method="POST" action="./constant.list"><input name="page" value="1"/><input name="limit" value="2"/><input name="fault_start_time" value="'.(time() - 60*60*24).'"/><input name="fault_stop_time" value="'.(time()).'"/><input type="submit"/></form>';
+});
+
 /*router('about',function(){
 	$data = array('view' => 'about');
 	view('about.html', $data);

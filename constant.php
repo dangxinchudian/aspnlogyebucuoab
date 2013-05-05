@@ -29,12 +29,13 @@ router('constant.list',function(){		//中断监测列表
 	$start = 0;
 	$limit = 10;
 
-	$page = filter('page', '/^[0-9]{1,9}$/', '起始位置格式错误');
+	$page = filter('page', '/^[0-9]{1,9}$/', 'page格式错误');
 	$limit = filter('limit', '/^[0-9]{1,9}$/', '偏移格式错误');
 	$start_time = filter('fault_start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
 	$stop_time = filter('fault_stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
 	if($limit <= 0) $limit = 1;
 
+	if($page < 1) $page = 1;
 	$start = ($page - 1) * $limit;
 
 	$constantModel = model('constant');
@@ -104,11 +105,16 @@ router('constant.fault',function(){		//故障历史
 		json(false, '未登录');
 	});
 
+	$start = 0;
+
 	$constant_id = filter('constant_id', '/^[0-9]{1,9}$/', '监测ID错误');
 	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
 	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
-	$start = filter('start', '/^[0-9]{1,10}$/', '起始位置格式错误');
+	$page = filter('page', '/^[0-9]{1,10}$/', 'page格式错误');
 	$limit = filter('limit', '/^[0-9]{1,10}$/', '偏移位置格式错误');
+
+	if($page < 1) $page = 1;
+	$start = ($page - 1) * $limit;
 
 	$constantModel = model('constant');
 	$result = $constantModel->faultList($constant_id, $start_time, $stop_time, $start, $limit);
