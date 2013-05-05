@@ -48,7 +48,7 @@ router('constant.list',function(){		//中断监测列表
 	}
 	$count = $constantModel->userCount($user_id);
 	$array = array(
-		'start' => $start,
+		'page' => $page,
 		'limit' => $limit,
 		'list' => $list,
 		'total' => $count 
