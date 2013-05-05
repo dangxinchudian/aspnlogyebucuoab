@@ -54,6 +54,46 @@ class aws extends modelLog{
 		return $this->db()->query($sql, 'array');		
 	}
 
+	public function errors($domain){
+		$schema = str_replace('.', '_', $domain).'_log';
+		$check = $this->checkSchema($schema);
+		if(!$check) return false;
+		$sql = "SELECT * FROM {$schema}.errors";
+		return $this->db()->query($sql, 'array');		
+	}
+
+	public function errorsPath($domain, $type, $start, $limit){
+		$schema = str_replace('.', '_', $domain).'_log';
+		$check = $this->checkSchema($schema);
+		if(!$check) return false;
+		$sql = "SELECT * FROM {$schema}.errors{$type} ORDER BY errors{$type}.hits DESC LIMIT {$start},{$limit}";
+		return $this->db()->query($sql, 'array');		
+	}
+
+	public function filetypes($domain){
+		$schema = str_replace('.', '_', $domain).'_log';
+		$check = $this->checkSchema($schema);
+		if(!$check) return false;
+		$sql = "SELECT * FROM {$schema}.filetypes";
+		return $this->db()->query($sql, 'array');		
+	}
+
+	public function hours($domain){
+		$schema = str_replace('.', '_', $domain).'_log';
+		$check = $this->checkSchema($schema);
+		if(!$check) return false;
+		$sql = "SELECT * FROM {$schema}.hours";
+		return $this->db()->query($sql, 'array');		
+	}
+
+	public function pageref($domain, $start, $limit){
+		$schema = str_replace('.', '_', $domain).'_log';
+		$check = $this->checkSchema($schema);
+		if(!$check) return false;
+		$sql = "SELECT * FROM {$schema}.pageref ORDER BY pageref.hits DESC LIMIT {$start},{$limit}";
+		return $this->db()->query($sql, 'array');		
+	}
+
 	public function summary($array){
 		if(empty($array)) return false;
 		$return = array();

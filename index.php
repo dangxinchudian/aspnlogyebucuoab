@@ -3,13 +3,16 @@
 
 date_default_timezone_set('PRC');
 
-//preg_match('/\/monitor\/(.+)$/', $_SERVER['REQUEST_URI'], $match);
 preg_match('/\/data\/(.+)$/', $_SERVER['REQUEST_URI'], $match);
+//preg_match('/\/data\/(.+)$/', $_SERVER['REQUEST_URI'], $match);
 $uri = (empty($match)) ? 'default' : $match[1];
 
 /*数据库*/
 require('./database.php');
 $db = new database;
+
+require('./database-log.php');
+$dbLog = new databaseLog;
 
 /*路由*/
 $router = Array();
@@ -53,6 +56,12 @@ class model{
 		return $db;
 	}
 }//model中转db类
+class modelLog{
+	function db(){
+		global $dbLog;
+		return $dbLog;
+	}
+}
 function model($value){
 	require("./model/{$value}.php");
 	return new $value;
@@ -68,6 +77,7 @@ require('user.php');
 require('domain.php');
 require('constant.php');
 require('server.php');
+require('log.php');
 require('task.php');
 //require('user.php');
 //require('domain.php');
@@ -79,7 +89,7 @@ router('test',function(){
 });
 
 router('test2',function(){
-	echo '<form method="POST" action="./domain.add"><input name="domain" value="test.com"/><input name="constantPath" value="/"><input name="customName" value="test.com"/><input type="submit"/></form>';
+	echo '<form method="POST" action="./domain.add"><input name="domain" value="test.com"/><input type="submit"/></form>';
 });
 
 router('test3', function(){
@@ -133,14 +143,6 @@ router('test13',function(){
 router('test14',function(){
 	$server = model('server');
 	print_r($server->check(2));
-});
-
-router('test15',function(){
-	echo '<form method="POST" action="./constant.setPath"><input name="constant_id" value="1"/><input name="path" value="/"><input type="submit"/></form>';
-});
-
-router('test16',function(){
-	echo '<form method="POST" action="./constant.list"><input name="page" value="1"/><input name="limit" value="2"/><input name="fault_start_time" value="'.(time() - 60*60*24).'"/><input name="fault_stop_time" value="'.(time()).'"/><input type="submit"/></form>';
 });
 
 /*router('about',function(){
