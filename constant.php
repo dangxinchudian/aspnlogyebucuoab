@@ -67,6 +67,7 @@ router('constant.get',function(){		//中断监测单个获得
 	$constant_id = filter('constant_id', '/^[0-9]{1,9}$/', '监测ID错误');	
 
 	$constantModel = model('constant');
+	$domainModel = model('domain');
 	$result = $constantModel->get($constant_id);
 	if(empty($result)) json(false, '监测ID对应对象为空');
 
@@ -74,6 +75,9 @@ router('constant.get',function(){		//中断监测单个获得
 	$result['fault_count'] = $constantModel->faultCount($constant_id, $result['creat_time'], time());
 	$result['3dayfault'] = $constantModel->faultTime($constant_id, time() - 3600*24*3, time());
 	$result['all_fault_time'] = $constantModel->faultTime($constant_id, $result['creat_time'], time());
+
+	//补全domain
+	$result['domain'] = $domainModel->get($result['domain_id']);
 
 	json(true, $result);
 
@@ -118,6 +122,7 @@ router('constant.fault',function(){		//故障历史
 
 	$constantModel = model('constant');
 	$result = $constantModel->faultList($constant_id, $start_time, $stop_time, $start, $limit);
+
 	json(true, $result);
 
 });
@@ -138,5 +143,6 @@ router('constant.setPath',function(){		//设置监控路径
 	$constantModel->update($constant_id, array('path' => $path));
 	json(true, '路径设置成功');
 });
+
 
 ?>

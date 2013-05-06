@@ -1,10 +1,10 @@
 <?php
 
 class database {
-	private $dbHost = 'localhost';
+	private $dbHost = '127.0.0.1';
 	private $dbName = 'monitor';
 	private $dbUser = 'root';
-	private $dbPass = '';
+	private $dbPass = 'flower';
 	private $dbObj = false;
 
 	function __construct(){
