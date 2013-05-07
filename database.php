@@ -1,10 +1,10 @@
 <?php
 
 class database {
-	private $dbHost = '127.0.0.1';
+	private $dbHost = '223.4.238.138';
 	private $dbName = 'monitor';
 	private $dbUser = 'root';
-	private $dbPass = 'flower';
+	private $dbPass = 'zooboa.com';
 	private $dbObj = false;
 
 	function __construct(){
