@@ -73,6 +73,7 @@ router('constant.get',function(){		//中断监测单个获得
 	if($constant_id == 0){
 		$result = $constantModel->get($user_id, 'user_id');
 	}else $result = $constantModel->get($constant_id);
+	$constant_id = $result['constant_id'];
 	//print_r($result);
 	if(empty($result)) json(false, '监测ID对应对象为空');
 	if($result['user_id'] != $user_id) json(false, '用户无法访问此中断监控数据');
