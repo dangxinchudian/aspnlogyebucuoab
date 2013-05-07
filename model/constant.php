@@ -12,9 +12,10 @@ class constant extends model{
 		return $this->db()->insertId();
 	}
 
-	public function faultList($constant_id, $start_time, $stop_time, $start, $limit){
-		if($constant_id != 0) $where = " AND constant_id = '{$constant_id}'";
+	public function faultList($constant_id, $start_time, $stop_time, $start, $limit, $type = false){
+		if($constant_id != 0) $where = " AND constant_id = '{$constant_id}' ";
 		else $where = '';
+		if($type !== false) $where .= " AND request_status = '{$type}' ";
 		$sql = "SELECT * FROM fault WHERE start_time >= {$start_time} AND start_time + keep_time <= {$stop_time} {$where} ORDER BY start_time DESC LIMIT {$start},{$limit}";
 		return $this->db()->query($sql, 'array');
 	}
@@ -82,7 +83,7 @@ class constant extends model{
 		$result = httpHeader($url);
 		$table = $this->table();
 		$time = time();
-		if($result['code'] != 200) $this->fault($constant_id, true);
+		if($result['code'] != 200) $this->fault($constant_id, true, $result['code']);
 		else $this->fault($constant_id, false);
 		$insertArray = array(
 			'constant_id' => $constant_id,
@@ -156,7 +157,7 @@ class constant extends model{
 		return $this->db()->update('constant', $updateArray, "constant_id = '{$constant_id}'");
 	}
 
-	public function fault($constant_id, $error = false){
+	public function fault($constant_id, $error = false, $code = false){
 		$sql = "SELECT period FROM constant WHERE constant_id = '{$constant_id}'";
 		$result = $this->db()->query($sql, 'row');
 		if(empty($result)) return false;
@@ -187,6 +188,7 @@ class constant extends model{
 					'start_time' => time(),
 					'keep_time' => $period
 				);
+				if($code) $insertArray['code'] = $code;
 				$result = $this->db()->insert('fault', $insertArray);
 			}else{		//持续故障时间累加
 				$sql = "UPDATE fault SET keep_time = keep_time + {$period} WHERE fault_id = '{$fault['fault_id']}'";

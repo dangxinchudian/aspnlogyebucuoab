@@ -122,12 +122,14 @@ router('constant.fault',function(){		//故障历史
 	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
 	$page = filter('page', '/^[0-9]{1,10}$/', 'page格式错误');
 	$limit = filter('limit', '/^[0-9]{1,10}$/', '偏移位置格式错误');
+	$type = filter('type', '/^[0-9\-]{1,5}$/', 'type格式错误');
 
 	if($page < 1) $page = 1;
 	$start = ($page - 1) * $limit;
+	if($type == -1) $type = false;
 
 	$constantModel = model('constant');
-	$result = $constantModel->faultList($constant_id, $start_time, $stop_time, $start, $limit);
+	$result = $constantModel->faultList($constant_id, $start_time, $stop_time, $start, $limit, $type);
 
 	json(true, $result);
 
