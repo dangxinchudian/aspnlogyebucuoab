@@ -204,6 +204,13 @@ class constant extends model{
 		return $count;
 	}
 
+	public function constant_id($user_id){
+		$sql = "SELECT constant_id FROM constant,domain WHERE constant.domain_id = domain.domain_id AND domain.user_id = '{$user_id}' ORDER BY creat_time ASC LIMIT 0,1";
+		$result = $this->db()->query($sql, 'row');
+		if(empty($result)) return false;
+		return $result['constant_id'];
+	}
+
 	public function userGet($user_id, $start, $limit){
 		$sql = "SELECT * FROM constant,domain WHERE constant.domain_id = domain.domain_id AND domain.user_id = '{$user_id}' LIMIT {$start},{$limit}";
 		return $this->db()->query($sql, 'array');

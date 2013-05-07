@@ -80,7 +80,7 @@ router('constant.get',function(){		//中断监测单个获得
 
 	$result['work_time'] = time() - $result['creat_time'];
 	$result['fault_count'] = $constantModel->faultCount($constant_id, $result['creat_time'], time());
-	$result['3dayfault'] = $constantModel->faultTime($constant_id, time() - 3600*24*3, time());
+	//$result['3dayfault'] = $constantModel->faultTime($constant_id, time() - 3600*24*3, time());
 	$result['all_fault_time'] = $constantModel->faultTime($constant_id, $result['creat_time'], time());
 
 	//补全domain
@@ -104,13 +104,15 @@ router('constant.detail',function(){		//中断监测图表绘制
 	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
 	$node_id = filter('node_id', '/^[0-9\-]{1,10}$/', 'node_id错误');
 
+	$constantModel = model('constant');
+	if($constant_id == 0) $constant_id = $constantModel->constant_id($user_id);
+	if(!$constant_id) json(false, 'access deny!');
 	/*$constant_id = 2;
 	$time_unit = 'day';
 	$start_time = time() - 60*60*24*30;
 	$stop_time  = time();*/
 	if($node_id == -1) $node_id = false;
 
-	$constantModel = model('constant');
 	$result = $constantModel->dataGet($constant_id, $time_unit, $start_time, $stop_time, $node_id);	
 	json(true, $result);
 
