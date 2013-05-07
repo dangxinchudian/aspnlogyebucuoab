@@ -132,9 +132,28 @@ class constant extends model{
 		return json_decode($return, true);
 	}
 
-	public function nodeList(){
+	public function nodeList($constant_id = false, $self = false){
+		$table = $this->table();
 		$sql = "SELECT * FROM constant_node";
-		return $this->db()->query($sql, 'array');
+		$result = $this->db()->query($sql, 'array');
+		if($constant_id){
+			foreach ($result as $key => $value) {
+				$sql = "SELECT * FROM {$table} WHERE constant_id = '{$constant_id}' AND constant_node_id = '{$value['constant_node_id']}' ORDER BY insert_time DESC LIMIT 0,1";
+				$node = $this->db()->query($sql, 'row');
+				$result[$key]['info'] = $node;
+			}
+		}
+		if($self){
+			$sql = "SELECT * FROM {$table} WHERE constant_id = '{$constant_id}' AND constant_node_id = 0 ORDER BY insert_time DESC LIMIT 0,1";
+			$node = $this->db()->query($sql, 'row');
+			$result[] = array(
+				'url' => '',
+				'constant_node_id' => 0,
+				'name' => 'localhost',
+				'info' => $node
+			);
+		}
+		return $result;
 	}
 
 	public function path($constant_id){

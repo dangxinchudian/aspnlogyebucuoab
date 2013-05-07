@@ -110,6 +110,24 @@ router('constant.detail',function(){		//中断监测图表绘制
 
 });
 
+router('constant.node',function(){		//中断监测图表绘制
+
+	$user = model('user');
+	$user_id = $user->sessionCheck(function(){
+		json(false, '未登录');
+	});
+
+	$constant_id = filter('constant_id', '/^[0-9]{1,9}$/', '监测ID错误');
+	
+	//$constant_id = 2;
+
+	$constantModel = model('constant');
+	$result = $constantModel->nodeList($constant_id, true);	
+
+	json(true, $result);
+
+});
+
 router('constant.fault',function(){		//故障历史
 
 	$user = model('user');
