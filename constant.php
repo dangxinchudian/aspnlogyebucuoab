@@ -68,7 +68,7 @@ router('constant.get',function(){		//中断监测单个获得
 
 	$constantModel = model('constant');
 	$domainModel = model('domain');
-	if($constant_id == 0) $constant_id = 1;
+	//if($constant_id == 0) $constant_id = 1;
 	$result = $constantModel->get($constant_id);
 	if(empty($result)) json(false, '监测ID对应对象为空');
 

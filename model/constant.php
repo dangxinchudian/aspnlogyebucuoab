@@ -64,11 +64,15 @@ class constant extends model{
 	}
 
 	public function get($value, $type = 'constant_id'){
-		$whereArray = array(
-			'domain_id' => " domain_id = '{$value}' ",
-			'constant_id' => " constant_id = '{$value}' "
-		);
-		$sql = "SELECT * FROM constant WHERE {$whereArray[$type]}";
+		if($value != 0){
+			$whereArray = array(
+				'domain_id' => " domain_id = '{$value}' ",
+				'constant_id' => " constant_id = '{$value}' "
+			);
+			$sql = "SELECT * FROM constant WHERE {$whereArray[$type]}";
+		}else{
+			$sql = "SELECT * FROM constant ORDER BY creat_time ASC LIMIT 0,1";
+		}
 		return $this->db()->query($sql, 'row');
 	}
 
