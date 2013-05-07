@@ -193,7 +193,7 @@ class constant extends model{
 		$sql = "SELECT sum(keep_time) FROM fault WHERE constant_id = '{$constant_id}' AND start_time >= {$start_time} AND start_time + keep_time <= {$stop_time}";
 		$result = $this->db()->query($sql, 'row');
 		$keep_time = $result['sum(keep_time)'];
-		echo $sql;
+		if(empty($keep_time)) $keep_time = 0;
 		return $keep_time;
 	}
 
