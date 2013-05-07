@@ -68,6 +68,7 @@ router('constant.get',function(){		//中断监测单个获得
 
 	$constantModel = model('constant');
 	$domainModel = model('domain');
+	if($constant_id == 0) $constant_id = 1;
 	$result = $constantModel->get($constant_id);
 	if(empty($result)) json(false, '监测ID对应对象为空');
 
@@ -95,6 +96,11 @@ router('constant.detail',function(){		//中断监测图表绘制
 	$time_unit = filter('time_unit', '/^day|month|year$/', '时间单位错误');
 	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
 	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
+
+	/*$constant_id = 2;
+	$time_unit = 'day';
+	$start_time = time() - 60*60*24*30;
+	$stop_time  = time();*/
 
 	$constantModel = model('constant');
 	$result = $constantModel->dataGet($constant_id, $time_unit, $start_time, $stop_time);	
