@@ -106,16 +106,21 @@ router('constant.detail',function(){		//中断监测图表绘制
 
 	/*$constant_id = 0;
 	$time_unit = 'day';
-	$start_time = time() - 60*60*24*30;
-	$stop_time  = time();*/
+	$start_time = 1367337600;
+	$stop_time  = 1367856000;
+	$node_id = 0;*/
 
 	$constantModel = model('constant');
 	if($constant_id == 0) $constant_id = $constantModel->constant_id($user_id);
 	if(!$constant_id) json(false, 'access deny!');
 	if($node_id == -1) $node_id = false;
 
-	$result = $constantModel->dataGet($constant_id, $time_unit, $start_time, $stop_time, $node_id);	
-	json(true, $result);
+	$return['data'] = $constantModel->dataGet($constant_id, $time_unit, $start_time, $stop_time, $node_id);
+	$return['date'] = array();
+	foreach ($return['data'] as $key => $value) $return['date'][] = $value['time'];
+	
+	//$return['date'] = 
+	json(true, $return);
 
 });
 
