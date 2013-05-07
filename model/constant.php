@@ -205,7 +205,7 @@ class constant extends model{
 	}
 
 	public function constant_id($user_id){
-		$sql = "SELECT constant_id FROM constant,domain WHERE constant.domain_id = domain.domain_id AND domain.user_id = '{$user_id}' ORDER BY creat_time ASC LIMIT 0,1";
+		$sql = "SELECT constant_id FROM constant,domain WHERE constant.domain_id = domain.domain_id AND domain.user_id = '{$user_id}' ORDER BY constant.creat_time ASC LIMIT 0,1";
 		$result = $this->db()->query($sql, 'row');
 		if(empty($result)) return false;
 		return $result['constant_id'];
