@@ -137,8 +137,10 @@ router('constant.node',function(){		//中断监测图表绘制
 	$constant_id = filter('constant_id', '/^[0-9]{1,9}$/', '监测ID错误');
 	
 	//$constant_id = 2;
-
 	$constantModel = model('constant');
+	if($constant_id == 0) $constant_id = $constantModel->constant_id($user_id);
+	if(!$constant_id) json(false, 'access deny!');
+
 	$result = $constantModel->nodeList($constant_id, true);	
 
 	json(true, $result);
