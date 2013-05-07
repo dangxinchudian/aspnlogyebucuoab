@@ -64,8 +64,8 @@ router('constant.get',function(){		//中断监测单个获得
 		json(false, '未登录');
 	});
 
-//	$constant_id = filter('constant_id', '/^[0-9]{1,9}$/', '监测ID错误');	
-	$constant_id = 1;
+	$constant_id = filter('constant_id', '/^[0-9]{1,9}$/', '监测ID错误');	
+//	$constant_id = 0;
 
 	$constantModel = model('constant');
 	$domainModel = model('domain');
