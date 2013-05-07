@@ -115,10 +115,13 @@ router('constant.detail',function(){		//中断监测图表绘制
 	if(!$constant_id) json(false, 'access deny!');
 	if($node_id == -1) $node_id = false;
 
-	$return['data'] = $constantModel->dataGet($constant_id, $time_unit, $start_time, $stop_time, $node_id);
+	$result = $constantModel->dataGet($constant_id, $time_unit, $start_time, $stop_time, $node_id);
 	$return['date'] = array();
-	foreach ($return['data'] as $key => $value) $return['date'][] = $value['time'];
-	
+	$return['data'] = array();
+	foreach ($result as $key => $value){
+		$return['date'][] = $value['time'];
+		$return['data'][] = $value['available'];
+	}	
 	//$return['date'] = 
 	json(true, $return);
 
