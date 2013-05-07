@@ -83,6 +83,31 @@ class constant extends model{
 		return (100 - $per);
 	}
 
+	public function faultNode($constant_id, $node_id, $period){
+		$year = array();
+		$sql = "SHOW TABLES LIKE 'constant_log%'";
+		$result = $this->db()->query($sql, 'array');
+		foreach ($result as $key => $value) $year[] = array_shift($value);
+		$sqlarray = array();
+		$sql200 = array();
+		foreach ($year as $key => $value) {
+			$sqlarray[] = "SELECT count({$value}.constant_log_id) as constant_count FROM {$value} WHERE constant_id = '{$constant_id}' AND constant_node_id = '{$node_id}'";
+			$sql200[] = "SELECT count({$value}.constant_log_id) as constant_count FROM {$value} WHERE constant_id = '{$constant_id}' AND request_status = '200' AND constant_node_id = '{$node_id}'";
+		}
+		$sqlarray = implode(' UNION ALL ', $sqlarray);
+		$sql200 = implode(' UNION ALL ', $sql200);
+		$result = $this->db()->query($sqlarray, 'array');
+		$result200 = $this->db()->query($sql200, 'array');
+		$return['total'] = $return['available'] = 0;
+		foreach ($result as $key => $value) {
+			$return['total'] = $return['total'] + $value['constant_count'] * $period;
+		}
+		foreach ($result200 as $key => $value) {
+			$return['available'] = $return['available'] + $value['constant_count'] * $period;
+		}
+		return $return;
+	}
+
 	public function check($constant_id){
 		$url = $this->path($constant_id);
 		if(!$url) return false;
@@ -149,14 +174,14 @@ class constant extends model{
 		if($self){
 			$sql = "SELECT * FROM {$table} WHERE constant_id = '{$constant_id}' AND constant_node_id = 0 ORDER BY insert_time DESC LIMIT 0,1";
 			$node = $this->db()->query($sql, 'row');
-			$result[] = array(
+			$local[] = array(
 				'url' => '',
 				'constant_node_id' => 0,
 				'name' => 'localhost',
 				'info' => $node
 			);
 		}
-		return $result;
+		return array_merge($local, $result);
 	}
 
 	public function path($constant_id){
@@ -177,6 +202,7 @@ class constant extends model{
 				  `request_result` varchar(255) NOT NULL,
 				  `request_status` int(10) unsigned NOT NULL,
 				  `insert_time` int(10) unsigned NOT NULL,
+				  `constant_node_id` int(10) unsigned NOT NULL,
 				  PRIMARY KEY (`constant_id`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 		$this->db()->query($sql, 'exec');
@@ -190,7 +216,11 @@ class constant extends model{
 	}
 
 	public function faultTime($constant_id, $start_time, $stop_time){
-		$sql = "SELECT sum(keep_time) FROM fault WHERE constant_id = '{$constant_id}' AND start_time >= {$start_time} AND start_time + keep_time <= {$stop_time}";
+		if($start_time != 0) $start = " AND start_time >= {$start_time} ";
+		else $start = '';
+		if($stop_time != 0) $stop = " AND start_time + keep_time <= {$stop_time} ";
+		else $stop = '';
+		$sql = "SELECT sum(keep_time) FROM fault WHERE constant_id = '{$constant_id}' {$start} {$stop}";
 		$result = $this->db()->query($sql, 'row');
 		$keep_time = $result['sum(keep_time)'];
 		if(empty($keep_time)) $keep_time = 0;

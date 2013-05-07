@@ -136,12 +136,16 @@ router('constant.node',function(){		//中断监测图表绘制
 
 	$constant_id = filter('constant_id', '/^[0-9]{1,9}$/', '监测ID错误');
 	
-	//$constant_id = 2;
+	$constant_id = 2;
 	$constantModel = model('constant');
 	if($constant_id == 0) $constant_id = $constantModel->constant_id($user_id);
 	if(!$constant_id) json(false, 'access deny!');
 
-	$result = $constantModel->nodeList($constant_id, true);	
+	$result = $constantModel->nodeList($constant_id, true);
+	$constant = $constantModel->get($constant_id);	
+	foreach ($result as $key => $value) {
+		$result[$key]['time'] = $constantModel->faultNode($constant_id, $value['constant_node_id'], $constant['period']);
+	}
 
 	json(true, $result);
 
