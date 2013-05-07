@@ -21,10 +21,13 @@ class constant extends model{
 	}
 
 	//需要进行跨表查询
-	public function dataGet($constant_id, $time_unit, $start_time, $stop_time){
+	public function dataGet($constant_id, $time_unit, $start_time, $stop_time, $node_id = false){
 		$start_year = date('Y', $start_time);
 		$stop_year = date('Y', $stop_time);
 		$year = array();
+		if($node_id) $node = " AND constant_node_id = '{$node_id}' ";
+		else $node = '';
+
 		for ($i = $start_year; $i <= $stop_year; $i++){
 			$sql = "SHOW TABLES LIKE 'constant_log_{$i}'";
 			$result = $this->db()->query($sql, 'row');
@@ -39,8 +42,8 @@ class constant extends model{
 		$sql200 = array();
 		$sqltotal = array();
 		foreach ($year as $key => $value) {
-			$sql200[] = "SELECT count(constant_log_id) AS log_count,date_format(FROM_UNIXTIME(insert_time),'{$typeArray[$time_unit]}') AS time FROM constant_log_{$value} WHERE constant_id = '{$constant_id}'  AND insert_time >= {$start_time} AND insert_time <= {$stop_time} AND request_status = '200' GROUP BY time";
-			$sqltotal[] = "SELECT count(constant_log_id) AS log_count,date_format(FROM_UNIXTIME(insert_time),'{$typeArray[$time_unit]}') AS time FROM constant_log_{$value} WHERE constant_id = '{$constant_id}'  AND insert_time >= {$start_time} AND insert_time <= {$stop_time} GROUP BY time";
+			$sql200[] = "SELECT count(constant_log_id) AS log_count,date_format(FROM_UNIXTIME(insert_time),'{$typeArray[$time_unit]}') AS time FROM constant_log_{$value} WHERE constant_id = '{$constant_id}'  AND insert_time >= {$start_time} AND insert_time <= {$stop_time} AND request_status = '200' {$node} GROUP BY time";
+			$sqltotal[] = "SELECT count(constant_log_id) AS log_count,date_format(FROM_UNIXTIME(insert_time),'{$typeArray[$time_unit]}') AS time FROM constant_log_{$value} WHERE constant_id = '{$constant_id}'  AND insert_time >= {$start_time} AND insert_time <= {$stop_time} {$node} GROUP BY time";
 		}
 		$sql200 = implode(' UNION ALL ', $sql200);
 		$sqltotal = implode(' UNION ALL ', $sqltotal);
@@ -93,9 +96,45 @@ class constant extends model{
 			'request_result' => $result['status']
 		);
 		$result = $this->db()->insert($table, $insertArray);
+
+		//分布式监控点
+		$nodeList = $this->nodeList();
+		foreach ($nodeList as $key => $value) {
+			$result = $this->nodeHttp($value['url'], $url);
+			$insertArray = array(
+				'constant_id' => $constant_id,
+				'request_time' => $result['time'],
+				'insert_time' => time(),
+				'request_status' => $result['code'],
+				'request_result' => $result['status'],
+				'constant_node_id' => $value['constant_node_id']
+			);
+			$result = $this->db()->insert($table, $insertArray);
+		}
+
 		if($result == 0) return false;
 		$sql = "UPDATE constant SET last_watch_time = '{$time}', watch_time = watch_time + period WHERE constant_id = '{$constant_id}'";
 		$this->db()->query($sql, 'exec');
+	}
+
+	public function nodeHttp($node_url, $url, $port = 80){
+		$curl = curl_init();
+		$timeOut = 30;
+
+		$node_url .= "?url={$url}&port={$port}";
+		curl_setopt($curl, CURLOPT_URL, $node_url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_PORT, $port);
+		curl_setopt($curl, CURLOPT_TIMEOUT, $timeOut);
+
+		$return = curl_exec($curl);
+
+		return json_decode($return, true);
+	}
+
+	public function nodeList(){
+		$sql = "SELECT * FROM constant_node";
+		return $this->db()->query($sql, 'array');
 	}
 
 	public function path($constant_id){

@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2013 年 05 月 04 日 14:17
--- 服务器版本: 5.5.30
+-- 生成日期: 2013 年 05 月 07 日 03:29
+-- 服务器版本: 5.5.31
 -- PHP 版本: 5.4.14
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
@@ -36,15 +36,16 @@ CREATE TABLE IF NOT EXISTS `constant` (
   `period` int(10) unsigned NOT NULL DEFAULT '60',
   `last_watch_time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`constant_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- 转存表中的数据 `constant`
 --
 
 INSERT INTO `constant` (`constant_id`, `domain_id`, `path`, `creat_time`, `watch_time`, `status`, `period`, `last_watch_time`) VALUES
-(1, 1, '/', 1366427257, 840, 'start', 60, 1367407259),
-(2, 2, '/', 1366427265, 780, 'start', 60, 1367407259);
+(1, 1, '/阿', 1366427257, 1020, 'start', 60, 1367896732),
+(2, 2, '/', 1366427265, 960, 'start', 60, 1367896733),
+(3, 3, '/', 1367677587, 180, 'start', 60, 1367896735);
 
 -- --------------------------------------------------------
 
@@ -112,47 +113,96 @@ CREATE TABLE IF NOT EXISTS `constant_log_2013` (
   `request_result` varchar(255) NOT NULL,
   `request_status` int(10) unsigned NOT NULL COMMENT '响应状态值',
   `insert_time` int(10) unsigned NOT NULL,
+  `constant_node_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`constant_log_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='连续性监测日志' AUTO_INCREMENT=34 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='连续性监测日志' AUTO_INCREMENT=61 ;
 
 --
 -- 转存表中的数据 `constant_log_2013`
 --
 
-INSERT INTO `constant_log_2013` (`constant_log_id`, `constant_id`, `request_time`, `request_result`, `request_status`, `insert_time`) VALUES
-(1, 1, 0.3280, 'Found', 302, 1366426492),
-(2, 2, 0.0630, 'OK', 200, 1366427492),
-(3, 1, 0.3750, 'Moved Temporarily', 302, 1366427739),
-(4, 2, 0.0620, 'OK', 200, 1366427740),
-(5, 1, 0.3290, 'Moved Temporarily', 302, 1366428505),
-(6, 1, 0.3280, 'Moved Temporarily', 302, 1366428522),
-(7, 1, 0.3280, 'Moved Temporarily', 302, 1366428546),
-(8, 2, 0.0620, 'OK', 200, 1366428546),
-(9, 1, 21.0150, 'Unable to access', 0, 1366428628),
-(10, 2, 0.0470, 'OK', 200, 1366428628),
-(11, 1, 21.2190, 'Unable to access', 0, 1366428796),
-(12, 2, 0.0630, 'OK', 200, 1366428796),
-(13, 1, 21.0000, 'Unable to access', 0, 1366431361),
-(14, 2, 0.0620, 'OK', 200, 1366431361),
-(15, 1, 21.0160, 'Unable to access', 0, 1366431846),
-(16, 2, 0.0470, 'OK', 200, 1366431846),
-(17, 1, 0.0000, 'Unable to access', 0, 1366431963),
-(18, 2, 0.0000, 'Unable to access', 0, 1366431963),
-(19, 1, 21.2660, 'Unable to access', 0, 1366432045),
-(20, 2, 0.0620, 'OK', 200, 1366432045),
-(21, 1, 21.0160, 'Unable to access', 0, 1366432135),
-(22, 2, 0.0470, 'OK', 200, 1366432135),
-(23, 1, 20.9850, 'Unable to access', 0, 1366432251),
-(24, 2, 0.0470, 'OK', 200, 1366432251),
-(25, 1, 21.0000, 'Unable to access', 0, 1366432333),
-(26, 2, 0.0310, 'OK', 200, 1366432333),
-(27, 1, 0.0000, 'Unable to access', 0, 1366432394),
-(28, 2, 0.0000, 'Unable to access', 0, 1366432394),
-(29, 1, 0.0000, 'Unable to access', 0, 1366432465),
-(30, 2, 0.0000, 'Unable to access', 0, 1334941261),
-(31, 1, 21.5000, 'Unable to access', 0, 1366432550),
-(32, 1, 0.0000, 'Unable to access', 0, 1367407259),
-(33, 2, 0.2169, 'OK', 200, 1367407259);
+INSERT INTO `constant_log_2013` (`constant_log_id`, `constant_id`, `request_time`, `request_result`, `request_status`, `insert_time`, `constant_node_id`) VALUES
+(1, 1, 0.3280, 'Found', 302, 1366426492, 0),
+(2, 2, 0.0630, 'OK', 200, 1366427492, 0),
+(3, 1, 0.3750, 'Moved Temporarily', 302, 1366427739, 0),
+(4, 2, 0.0620, 'OK', 200, 1366427740, 0),
+(5, 1, 0.3290, 'Moved Temporarily', 302, 1366428505, 0),
+(6, 1, 0.3280, 'Moved Temporarily', 302, 1366428522, 0),
+(7, 1, 0.3280, 'Moved Temporarily', 302, 1366428546, 0),
+(8, 2, 0.0620, 'OK', 200, 1366428546, 0),
+(9, 1, 21.0150, 'Unable to access', 0, 1366428628, 0),
+(10, 2, 0.0470, 'OK', 200, 1366428628, 0),
+(11, 1, 21.2190, 'Unable to access', 0, 1366428796, 0),
+(12, 2, 0.0630, 'OK', 200, 1366428796, 0),
+(13, 1, 21.0000, 'Unable to access', 0, 1366431361, 0),
+(14, 2, 0.0620, 'OK', 200, 1366431361, 0),
+(15, 1, 21.0160, 'Unable to access', 0, 1366431846, 0),
+(16, 2, 0.0470, 'OK', 200, 1366431846, 0),
+(17, 1, 0.0000, 'Unable to access', 0, 1366431963, 0),
+(18, 2, 0.0000, 'Unable to access', 0, 1366431963, 0),
+(19, 1, 21.2660, 'Unable to access', 0, 1366432045, 0),
+(20, 2, 0.0620, 'OK', 200, 1366432045, 0),
+(21, 1, 21.0160, 'Unable to access', 0, 1366432135, 0),
+(22, 2, 0.0470, 'OK', 200, 1366432135, 0),
+(23, 1, 20.9850, 'Unable to access', 0, 1366432251, 0),
+(24, 2, 0.0470, 'OK', 200, 1366432251, 0),
+(25, 1, 21.0000, 'Unable to access', 0, 1366432333, 0),
+(26, 2, 0.0310, 'OK', 200, 1366432333, 0),
+(27, 1, 0.0000, 'Unable to access', 0, 1366432394, 0),
+(28, 2, 0.0000, 'Unable to access', 0, 1366432394, 0),
+(29, 1, 0.0000, 'Unable to access', 0, 1366432465, 0),
+(30, 2, 0.0000, 'Unable to access', 0, 1334941261, 0),
+(31, 1, 21.5000, 'Unable to access', 0, 1366432550, 0),
+(32, 1, 0.0000, 'Unable to access', 0, 1367407259, 0),
+(33, 2, 0.2169, 'OK', 200, 1367407259, 0),
+(34, 1, 0.4921, 'Moved Temporarily', 302, 1367896496, 0),
+(35, 1, 0.0000, 'Unable to access', 0, 1367896497, 1),
+(36, 1, 0.0000, 'Unable to access', 0, 1367896497, 2),
+(37, 2, 0.0537, 'OK', 200, 1367896497, 0),
+(38, 2, 0.0000, 'Unable to access', 0, 1367896497, 1),
+(39, 2, 0.0000, 'Unable to access', 0, 1367896497, 2),
+(40, 3, 0.4990, 'Unable to access', 0, 1367896522, 0),
+(41, 3, 0.0000, 'Unable to access', 0, 1367896522, 1),
+(42, 3, 0.0000, 'Unable to access', 0, 1367896522, 2),
+(43, 1, 0.4306, 'Moved Temporarily', 302, 1367896609, 0),
+(44, 1, 0.0000, 'Unable to access', 0, 1367896609, 1),
+(45, 1, 0.0000, 'Unable to access', 0, 1367896609, 2),
+(46, 2, 0.2919, 'OK', 200, 1367896609, 0),
+(47, 2, 0.0000, 'Unable to access', 0, 1367896609, 1),
+(48, 2, 0.0000, 'Unable to access', 0, 1367896609, 2),
+(49, 3, 0.4742, 'Moved Temporarily', 302, 1367896610, 0),
+(50, 3, 0.0000, 'Unable to access', 0, 1367896610, 1),
+(51, 3, 0.0000, 'Unable to access', 0, 1367896610, 2),
+(52, 1, 0.7042, 'Moved Temporarily', 302, 1367896732, 0),
+(53, 1, 0.6904, 'Moved Temporarily', 302, 1367896733, 1),
+(54, 1, 0.4984, 'Moved Temporarily', 302, 1367896733, 2),
+(55, 2, 0.0397, 'OK', 200, 1367896733, 0),
+(56, 2, 0.2046, 'OK', 200, 1367896734, 1),
+(57, 2, 0.0225, 'OK', 200, 1367896734, 2),
+(58, 3, 1.1609, 'Moved Temporarily', 302, 1367896735, 0),
+(59, 3, 1.4417, 'Moved Temporarily', 302, 1367896736, 1),
+(60, 3, 1.0161, 'Unable to access', 0, 1367896738, 2);
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `constant_node`
+--
+
+CREATE TABLE IF NOT EXISTS `constant_node` (
+  `constant_node_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`constant_node_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- 转存表中的数据 `constant_node`
+--
+
+INSERT INTO `constant_node` (`constant_node_id`, `url`, `name`) VALUES
+(1, 'http://1.jelope.duapp.com/agent.php', '北京联通'),
+(2, 'http://ibookbook.aliapp.com/agent.php', '杭州阿里');
 
 -- --------------------------------------------------------
 
@@ -170,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `domain` (
   `port` int(10) unsigned NOT NULL DEFAULT '80',
   PRIMARY KEY (`domain_id`),
   UNIQUE KEY `domain_name` (`domain_name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- 转存表中的数据 `domain`
@@ -178,7 +228,8 @@ CREATE TABLE IF NOT EXISTS `domain` (
 
 INSERT INTO `domain` (`domain_id`, `user_id`, `custom_name`, `domain_name`, `creat_time`, `server_id`, `port`) VALUES
 (1, 1, '', 'test.com', 1366427257, 0, 80),
-(2, 1, '', 'www.hdu.edu.cn', 1366427265, 0, 80);
+(2, 1, '', 'www.hdu.edu.cn', 1366427265, 0, 80),
+(3, 1, 'test.com', 'test3.com', 1367677587, 0, 80);
 
 -- --------------------------------------------------------
 
@@ -192,17 +243,19 @@ CREATE TABLE IF NOT EXISTS `fault` (
   `status` enum('slove','unslove') NOT NULL DEFAULT 'unslove',
   `keep_time` int(10) unsigned NOT NULL DEFAULT '0',
   `start_time` int(10) unsigned NOT NULL,
+  `request_status` int(10) NOT NULL DEFAULT '-2' COMMENT '-2为未知错误',
   PRIMARY KEY (`fault_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='故障时间' AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='故障时间' AUTO_INCREMENT=5 ;
 
 --
 -- 转存表中的数据 `fault`
 --
 
-INSERT INTO `fault` (`fault_id`, `constant_id`, `status`, `keep_time`, `start_time`) VALUES
-(1, 1, 'unslove', 600, 1366431846),
-(2, 2, 'slove', 180, 1366431963),
-(3, 2, 'slove', 120, 1366432394);
+INSERT INTO `fault` (`fault_id`, `constant_id`, `status`, `keep_time`, `start_time`, `request_status`) VALUES
+(1, 1, 'unslove', 780, 1366431846, 0),
+(2, 2, 'slove', 180, 1366431963, 0),
+(3, 2, 'slove', 120, 1366432394, 0),
+(4, 3, 'unslove', 180, 1367896522, -2);
 
 -- --------------------------------------------------------
 
@@ -353,7 +406,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`user_id`, `mail`, `passwd`, `usalt`, `creat_time`, `last_login_time`) VALUES
-(1, 'zje2008@qq.com', '7245b8234755f6ecc280c80369c85156', '9WSd6Nb2xLBK8uFlO3Q58BnR0Lw', 1366189506, 1367203917);
+(1, 'zje2008@qq.com', '7245b8234755f6ecc280c80369c85156', '9WSd6Nb2xLBK8uFlO3Q58BnR0Lw', 1366189506, 1367830883);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

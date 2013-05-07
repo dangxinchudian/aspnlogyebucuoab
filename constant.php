@@ -96,14 +96,16 @@ router('constant.detail',function(){		//中断监测图表绘制
 	$time_unit = filter('time_unit', '/^day|month|year$/', '时间单位错误');
 	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
 	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
+	$node_id = filter('node_id', '/^[0-9\-]{1,10}$/', 'node_id错误');
 
 	/*$constant_id = 2;
 	$time_unit = 'day';
 	$start_time = time() - 60*60*24*30;
 	$stop_time  = time();*/
+	if($node_id == -1) $node_id = false;
 
 	$constantModel = model('constant');
-	$result = $constantModel->dataGet($constant_id, $time_unit, $start_time, $stop_time);	
+	$result = $constantModel->dataGet($constant_id, $time_unit, $start_time, $stop_time, $node_id);	
 	json(true, $result);
 
 });
@@ -123,6 +125,13 @@ router('constant.fault',function(){		//故障历史
 	$page = filter('page', '/^[0-9]{1,10}$/', 'page格式错误');
 	$limit = filter('limit', '/^[0-9]{1,10}$/', '偏移位置格式错误');
 	$type = filter('type', '/^[0-9\-]{1,5}$/', 'type格式错误');
+
+	/*$constant_id = 1;
+	$start_time = time() - 60*60*24*30;
+	$stop_time = time();
+	$page = 1;
+	$limit = 10;
+	$type = -1;*/
 
 	if($page < 1) $page = 1;
 	$start = ($page - 1) * $limit;
