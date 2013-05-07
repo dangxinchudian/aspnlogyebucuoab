@@ -64,13 +64,18 @@ router('constant.get',function(){		//中断监测单个获得
 		json(false, '未登录');
 	});
 
-	$constant_id = filter('constant_id', '/^[0-9]{1,9}$/', '监测ID错误');	
+//	$constant_id = filter('constant_id', '/^[0-9]{1,9}$/', '监测ID错误');	
+	$constant_id = 1;
 
 	$constantModel = model('constant');
 	$domainModel = model('domain');
 	//if($constant_id == 0) $constant_id = 1;
-	$result = $constantModel->get($constant_id);
+	if($constant_id == 0){
+		$result = $constantModel->get($user_id, 'user_id');
+	}else $result = $constantModel->get($constant_id);
+	//print_r($result);
 	if(empty($result)) json(false, '监测ID对应对象为空');
+	if($result['user_id'] != $user_id) json(false, '用户无法访问此中断监控数据');
 
 	$result['work_time'] = time() - $result['creat_time'];
 	$result['fault_count'] = $constantModel->faultCount($constant_id, $result['creat_time'], time());
