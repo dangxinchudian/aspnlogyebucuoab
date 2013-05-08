@@ -187,7 +187,7 @@ router('constant.fault',function(){		//故障历史
 	);
 	$return['list'] = $constantModel->faultList($constant_id, $start_time, $stop_time, $start, $limit, $type);
 
-	json(true, $result);
+	json(true, $return);
 
 });
 
