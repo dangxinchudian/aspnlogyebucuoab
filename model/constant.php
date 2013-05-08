@@ -20,6 +20,16 @@ class constant extends model{
 		return $this->db()->query($sql, 'array');
 	}
 
+	public function faultCount($constant_id, $start_time, $stop_time, $type = false){
+		if($constant_id != 0) $where = " AND constant_id = '{$constant_id}' ";
+		else $where = '';
+		if($type !== false) $where .= " AND request_status = '{$type}' ";
+		$sql = "SELECT count(fault_id) FROM fault WHERE start_time >= {$start_time} AND start_time + keep_time <= {$stop_time} {$where}";
+		$result = $this->db()->query($sql, 'row');
+		if(empty($result['count(fault_id)'])) return 0;
+		return $result['count(fault_id)'];
+	}
+
 	//需要进行跨表查询
 	public function dataGet($constant_id, $time_unit, $start_time, $stop_time, $node_id = false){
 		$start_year = date('Y', $start_time);
