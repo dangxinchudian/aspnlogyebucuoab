@@ -110,18 +110,31 @@ router('constant.detail',function(){		//中断监测图表绘制
 	$stop_time  = 1367856000;
 	$node_id = 0;*/
 
+	if($stop_time < $start_time) json(false, 'time error!');
 	$constantModel = model('constant');
 	if($constant_id == 0) $constant_id = $constantModel->constant_id($user_id);
 	if(!$constant_id) json(false, 'access deny!');
 	if($node_id == -1) $node_id = false;
 
 	$result = $constantModel->dataGet($constant_id, $time_unit, $start_time, $stop_time, $node_id);
-	$return['date'] = array();
-	$return['data'] = array();
+//	$return['date'] = array();
+//	$return['data'] = array();
+	$data = array();
+
+	//date&data complete
+	for($i=1; $i< ($stop_time - $start_time) / (3600*24); $i++){
+		if($time_unit == 'day') $data[date('Y-m-d', $start_time + 3600 * 24 * $i)] = 0;
+		elseif($time_unit == 'month') $data[date('Y-m', $start_time + 3600 * 24 * $i * 30)] = 0;
+		elseif($time_unit == 'year') $data[date('Y-m', $start_time + 3600 * 24 * $i * 365)] = 0;
+	}
+
 	foreach ($result as $key => $value){
-		$return['date'][] = $value['time'];
-		$return['data'][] = $value['available'];
-	}	
+		$data[$value['time']] = $value['available'];
+	}
+	$return = array(
+		'data' => array_values($data),
+		'date' => array_keys($data)
+	);
 	//$return['date'] = 
 	json(true, $return);
 
