@@ -85,6 +85,11 @@ router('constant.get',function(){		//中断监测单个获得
 
 	//补全domain
 	$result['domain'] = $domainModel->get($result['domain_id']);
+	//补全server
+	if($result['server_id'] != 0){
+		$server = model('server');
+		$result['server_info'] = $server->get($server_id);
+	}else{ $result['server_info'] = false;
 
 	json(true, $result);
 
