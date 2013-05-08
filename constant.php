@@ -89,7 +89,7 @@ router('constant.get',function(){		//中断监测单个获得
 	if($result['server_id'] != 0){
 		$server = model('server');
 		$result['server_info'] = $server->get($server_id);
-	}else{ $result['server_info'] = false;
+	}else $result['server_info'] = false;
 
 	json(true, $result);
 
