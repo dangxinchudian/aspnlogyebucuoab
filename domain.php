@@ -63,13 +63,26 @@ router('domain.setServer',function(){
 	$domain_id = filter('domain_id', '/^[0-9]{1,9}$/', '域名ID错误');	
 	$server_id = filter('server_id', '/^[0-9]{1,9}$/', '服务器ID错误');
 
+	/*$domain_id = 2;
+	$server_id = 0;*/
+
+
 	$domainModel = model('domain');
 	$find = $domainModel->get($domain_id);
 	if($find['user_id'] != $user_id) json(false, '无权操作该域名');
 
 	$serverModel = model('server');
-	$find = $serverModel->get($server_id);
-	if($find['user_id'] != $user_id) json(false, '无权操作该服务器');
+	if($server_id == 0){		//auto add
+		$ip = gethostbyname($find['domain_name']);
+		$info = $serverModel->get($ip, 'ip');
+		if(empty($info)){		//add
+			$server_id = $serverModel->add($ip, $user_id);
+		}else $server_id = $info['server_id'];
+	}else{
+		$find = $serverModel->get($server_id);
+		if(empty($find)) json(false, 'can\'t find the server!');
+		if($find['user_id'] != $user_id) json(false, '无权操作该服务器');
+	}
 
 	$updateArray = array('server_id' => $server_id);
 	$result = $domainModel->update($domain_id, $updateArray);
