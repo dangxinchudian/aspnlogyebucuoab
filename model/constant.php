@@ -297,7 +297,7 @@ class constant extends model{
 					'start_time' => time(),
 					'keep_time' => $period
 				);
-				if($code) $insertArray['code'] = $code;
+				if($code) $insertArray['request_status'] = $code;
 				$result = $this->db()->insert('fault', $insertArray);
 			}else{		//持续故障时间累加
 				$sql = "UPDATE fault SET keep_time = keep_time + {$period} WHERE fault_id = '{$fault['fault_id']}'";
