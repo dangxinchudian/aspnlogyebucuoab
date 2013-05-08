@@ -122,7 +122,7 @@ router('constant.detail',function(){		//中断监测图表绘制
 	$data = array();
 
 	//date&data complete
-	for($i=1; $i< ($stop_time - $start_time) / (3600*24); $i++){
+	for($i = 0 ; $i< ($stop_time - $start_time) / (3600*24); $i++){
 		if($time_unit == 'day') $data[date('Y-m-d', $start_time + 3600 * 24 * $i)] = 0;
 		elseif($time_unit == 'month') $data[date('Y-m', $start_time + 3600 * 24 * $i * 30)] = 0;
 		elseif($time_unit == 'year') $data[date('Y-m', $start_time + 3600 * 24 * $i * 365)] = 0;
