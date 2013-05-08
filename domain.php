@@ -60,7 +60,7 @@ router('domain.setServer',function(){
 		json(false, '未登录');
 	});
 
-	$domain_id = filter('domain_id', '/^[0-9]{1,9}$/', '域名ID错误');	
+	$domain_id = filter('domain_id', '/^[0-9]{1,9}$/', '域名ID错误');
 	$server_id = filter('server_id', '/^[0-9]{1,9}$/', '服务器ID错误');
 
 	/*$domain_id = 2;
