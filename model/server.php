@@ -1,11 +1,12 @@
 <?php
 class server extends model{
 
-	public function add($ip, $user_id){
+	public function add($ip, $user_id, $custom_name = ''){
 		$insertArray = array(
 			'ip' => $ip, 
 			'user_id' => $user_id,
-			'creat_time' => time()
+			'creat_time' => time(),
+			'custom_name' => $custom_name
 		);
 		$result = $this->db()->insert('server', $insertArray);
 		if($result == 0) return false;

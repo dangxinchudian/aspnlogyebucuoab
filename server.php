@@ -8,13 +8,14 @@ router('server.add',function(){
 	});
 
 	$ip =  filter('ip', '/^([0-9]{1,3}.){3}[0-9]{1,3}$/', 'IP格式错误');
+	$custom_name = filter('customName', '/^.{0,255}$/', '别名格式错误');
 
 	$server = model('server');
 	$info = $server->get($ip, 'ip');
 
 	if(!empty($info)) json(false, '该服务器IP已经被添加');
 
-	$result = $server->add($ip, $user_id);
+	$result = $server->add($ip, $user_id, $custom_name);
 	if($result === false) json(false, '添加失败');
 	json(true, '添加成功');
 
