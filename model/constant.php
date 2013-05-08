@@ -237,12 +237,12 @@ class constant extends model{
 		return $keep_time;
 	}
 
-	public function faultCount($constant_id, $start_time, $stop_time){
+	/*public function faultCount($constant_id, $start_time, $stop_time){
 		$sql = "SELECT count(fault_id) FROM fault WHERE constant_id = '{$constant_id}' AND start_time >= {$start_time} AND start_time + keep_time <= {$stop_time}";
 		$result = $this->db()->query($sql, 'row');
 		$count = $result['count(fault_id)'];
 		return $count;
-	}
+	}*/
 
 	public function constant_id($user_id){
 		$sql = "SELECT constant_id FROM constant,domain WHERE constant.domain_id = domain.domain_id AND domain.user_id = '{$user_id}' ORDER BY constant.creat_time ASC LIMIT 0,1";
