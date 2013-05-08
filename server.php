@@ -51,6 +51,48 @@ router('server.info',function(){
 
 });
 
+router('server.list',function(){
+
+	$user = model('user');
+	$user_id = $user->sessionCheck(function(){
+		json(false, '未登录');
+	});
+
+	$page = filter('page', '/^[0-9]{1,9}$/', 'page格式错误');
+	$limit = filter('limit', '/^[0-9]{1,9}$/', '偏移格式错误');	
+
+	/*$page = 1;
+	$limit = 5;*/
+
+	if($page < 1) $page = 1;
+	$start = ($page - 1) * $limit;
+
+	$server = model('server');
+	$where = " user_id = '{$user_id}' LIMIT {$start},{$limit}";
+	$result = $server->listGet($where);
+
+	foreach ($result as $key => $value) {
+		$result[$key]['last_netstat'] = jdecode($result[$key]['last_netstat']);
+		$result[$key]['last_run'] = jdecode($result[$key]['last_run']);
+		$result[$key]['last_device'] = jdecode($result[$key]['last_device']);
+		$result[$key]['last_cpu'] = jdecode($result[$key]['last_cpu']);
+		$result[$key]['last_memory'] = jdecode($result[$key]['last_memory']);
+		$result[$key]['last_disk'] = jdecode($result[$key]['last_disk']);
+		$result[$key]['last_network'] = jdecode($result[$key]['last_network']);
+	}
+
+	$return = array(
+		'list' => $result,
+		'page' => $page,
+		'limit' => $limit,
+		'total' => $server->countGet(" user_id = '{$user_id}'")
+	);
+
+	json(true, $return);
+
+});
+
+
 router('server.disk',function(){
 
 	$user = model('user');

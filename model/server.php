@@ -44,6 +44,13 @@ class server extends model{
 		return $this->db()->query($sql, 'array');
 	}
 
+	public function countGet($where = ''){
+		if(!empty($where)) $where = " WHERE {$where}";
+		$sql = "SELECT count(server_id) FROM server {$where}";
+		$result = $this->db()->query($sql, 'row');
+		return $result['count(server_id)'];		
+	}
+
 	public function diskGet($server_id, $name, $time_unit, $start_time, $stop_time){
 		$start_year = date('Y', $start_time);
 		$stop_year = date('Y', $stop_time);
