@@ -190,8 +190,9 @@ class constant extends model{
 				'name' => 'localhost',
 				'info' => $node
 			);
+			array_merge($local, $result);
 		}
-		return array_merge($local, $result);
+		return $result;
 	}
 
 	public function path($constant_id){

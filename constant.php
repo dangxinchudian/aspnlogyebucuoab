@@ -204,6 +204,11 @@ router('constant.fault',function(){		//故障历史
 	);
 	$return['list'] = $constantModel->faultList($constant_id, $start_time, $stop_time, $start, $limit, $type);
 
+	//fix http code
+	foreach ($return['list'] as $key => $value) {
+		$return['list'][$key]['request_result'] = errorHeader($value['request_status']);
+	}
+
 	json(true, $return);
 
 });
