@@ -77,6 +77,7 @@ require('user.php');
 require('domain.php');
 require('constant.php');
 require('server.php');
+require('attack.php');
 require('log.php');
 require('task.php');
 //require('user.php');

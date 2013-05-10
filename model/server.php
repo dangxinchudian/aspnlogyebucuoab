@@ -13,6 +13,10 @@ class server extends model{
 		return $this->db()->insertId();
 	}
 
+	public function update($server_id, $updateArray){
+		return $this->db()->update('server', $updateArray, "server_id = '{$server_id}'");
+	}
+
 	public function get($value, $type = 'server_id'){
 		$whereArray = array(
 			'server_id' => " server_id = '{$value}' ",

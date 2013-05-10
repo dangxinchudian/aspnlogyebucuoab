@@ -21,6 +21,72 @@ router('server.add',function(){
 
 });
 
+router('server.setName',function(){
+
+	$user = model('user');
+	$user_id = $user->sessionCheck(function(){
+		json(false, '未登录');
+	});
+
+	$server_id =  filter('server_id', '/^[0-9]{1,9}$/', 'server_id格式错误');
+	$custom_name = filter('customName', '/^.{0,255}$/', '别名格式错误');
+
+	$server = model('server');
+	$info = $server->get($server_id);
+
+	if(empty($info)) json(false, '服务器ID不存在');
+	if($info['user_id'] != $user_id) json(false, '无权操作该服务器');
+
+	$result = $server->update($server_id, array('custom_name' => $custom_name), "server_id = '{$server_id}'");
+	if($result == 0) json(false, '未进行更改');
+	json(true, '更改成功');
+
+});
+
+router('server.setPort',function(){
+
+	$user = model('user');
+	$user_id = $user->sessionCheck(function(){
+		json(false, '未登录');
+	});
+
+	$server_id =  filter('server_id', '/^[0-9]{1,9}$/', 'server_id格式错误');
+	$port = filter('port', '/^([0-9]{1,5}$/', 'port格式错误');
+
+	$server = model('server');
+	$info = $server->get($server_id);
+
+	if(empty($info)) json(false, '服务器ID不存在');
+	if($info['user_id'] != $user_id) json(false, '无权操作该服务器');
+
+	$result = $server->update($server_id, array('port' => $port), "server_id = '{$server_id}'");
+	if($result == 0) json(false, '未进行更改');
+	json(true, '更改成功');
+
+});
+
+router('server.setCommunity',function(){
+
+	$user = model('user');
+	$user_id = $user->sessionCheck(function(){
+		json(false, '未登录');
+	});
+
+	$server_id =  filter('server_id', '/^[0-9]{1,9}$/', 'server_id格式错误');
+	$community = filter('community', '/^.{0,255}$/', 'community格式错误');
+
+	$server = model('server');
+	$info = $server->get($server_id);
+
+	if(empty($info)) json(false, '服务器ID不存在');
+	if($info['user_id'] != $user_id) json(false, '无权操作该服务器');
+
+	$result = $server->update($server_id, array('snmpv2_community' => $community), "server_id = '{$server_id}'");
+	if($result == 0) json(false, '未进行更改');
+	json(true, '更改成功');
+
+});
+
 router('server.info',function(){
 
 	$user = model('user');
